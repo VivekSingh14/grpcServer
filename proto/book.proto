@@ -1,19 +1,19 @@
 syntax = "proto3";
-package greet;
+package book;
 
 option go_package = "github.com/grpcserver/proto";
 
 
-message AuthRequest {
+message BookRequest {
     string name = 1;
 }
 
-message AuthResponse {
+message BookResponse {
     string book_name = 1;
 }
 
 service BookService {
-    rpc NameCreated (AuthRequest) returns (AuthResponse);
+    rpc Book (BookRequest) returns (BookResponse);
     //rpc GreetManyTimes(GreetRequest) returns (stream GreetResponse);
     //rpc GreetEveryone(stream GreetRequest) returns (stream GreetResponse);
 }

@@ -8,7 +8,7 @@ import (
 	"google.golang.org/grpc"
 )
 
-var addr string = "0.0.0.0:50051"
+var addr string = "0.0.0.0:50052"
 
 type Server struct {
 	pb.BookServiceServer
@@ -24,6 +24,7 @@ func main() {
 	log.Printf("Listening at: %s \n", addr)
 
 	s := grpc.NewServer()
+
 	pb.RegisterBookServiceServer(s, &Server{})
 
 	if err = s.Serve(lis); err != nil {

@@ -2,7 +2,7 @@
 // versions:
 // - protoc-gen-go-grpc v1.2.0
 // - protoc             v3.21.7
-// source: proto/auth.proto
+// source: proto/book.proto
 
 package proto
 
@@ -22,7 +22,7 @@ const _ = grpc.SupportPackageIsVersion7
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type BookServiceClient interface {
-	NameCreated(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error)
+	Book(ctx context.Context, in *BookRequest, opts ...grpc.CallOption) (*BookResponse, error)
 }
 
 type bookServiceClient struct {
@@ -33,9 +33,9 @@ func NewBookServiceClient(cc grpc.ClientConnInterface) BookServiceClient {
 	return &bookServiceClient{cc}
 }
 
-func (c *bookServiceClient) NameCreated(ctx context.Context, in *AuthRequest, opts ...grpc.CallOption) (*AuthResponse, error) {
-	out := new(AuthResponse)
-	err := c.cc.Invoke(ctx, "/greet.BookService/NameCreated", in, out, opts...)
+func (c *bookServiceClient) Book(ctx context.Context, in *BookRequest, opts ...grpc.CallOption) (*BookResponse, error) {
+	out := new(BookResponse)
+	err := c.cc.Invoke(ctx, "/book.BookService/Book", in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -46,7 +46,7 @@ func (c *bookServiceClient) NameCreated(ctx context.Context, in *AuthRequest, op
 // All implementations must embed UnimplementedBookServiceServer
 // for forward compatibility
 type BookServiceServer interface {
-	NameCreated(context.Context, *AuthRequest) (*AuthResponse, error)
+	Book(context.Context, *BookRequest) (*BookResponse, error)
 	mustEmbedUnimplementedBookServiceServer()
 }
 
@@ -54,8 +54,8 @@ type BookServiceServer interface {
 type UnimplementedBookServiceServer struct {
 }
 
-func (UnimplementedBookServiceServer) NameCreated(context.Context, *AuthRequest) (*AuthResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method NameCreated not implemented")
+func (UnimplementedBookServiceServer) Book(context.Context, *BookRequest) (*BookResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Book not implemented")
 }
 func (UnimplementedBookServiceServer) mustEmbedUnimplementedBookServiceServer() {}
 
@@ -70,20 +70,20 @@ func RegisterBookServiceServer(s grpc.ServiceRegistrar, srv BookServiceServer) {
 	s.RegisterService(&BookService_ServiceDesc, srv)
 }
 
-func _BookService_NameCreated_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(AuthRequest)
+func _BookService_Book_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(BookRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
 	if interceptor == nil {
-		return srv.(BookServiceServer).NameCreated(ctx, in)
+		return srv.(BookServiceServer).Book(ctx, in)
 	}
 	info := &grpc.UnaryServerInfo{
 		Server:     srv,
-		FullMethod: "/greet.BookService/NameCreated",
+		FullMethod: "/book.BookService/Book",
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(BookServiceServer).NameCreated(ctx, req.(*AuthRequest))
+		return srv.(BookServiceServer).Book(ctx, req.(*BookRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -92,14 +92,14 @@ func _BookService_NameCreated_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var BookService_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "greet.BookService",
+	ServiceName: "book.BookService",
 	HandlerType: (*BookServiceServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
-			MethodName: "NameCreated",
-			Handler:    _BookService_NameCreated_Handler,
+			MethodName: "Book",
+			Handler:    _BookService_Book_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},
-	Metadata: "proto/auth.proto",
+	Metadata: "proto/book.proto",
 }
